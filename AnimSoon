@@ -1,0 +1,87 @@
+-- Ana GUI oluşturma
+local ScreenGui = Instance.new("ScreenGui")
+local TextLabel = Instance.new("TextLabel")
+
+-- ScreenGui ayarları
+ScreenGui.Name = "AnimatedTextGui"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Metin etiketi ayarları
+TextLabel.Name = "AnimatedText"
+TextLabel.Parent = ScreenGui
+TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+TextLabel.Size = UDim2.new(0.11, 0, 0.8, 0)
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1
+TextLabel.Text = "Soon, I  dont made it yet..."
+TextLabel.Font = Enum.Font.LuckiestGuy
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 70
+TextLabel.TextTransparency = 1
+
+-- TweenService'ı kullanarak animasyon oluşturma
+local TweenService = game:GetService("TweenService")
+
+-- Belirme animasyonu (1 saniye)
+local appearTweenInfo = TweenInfo.new(
+    1, -- Süre
+    Enum.EasingStyle.Quad, -- Easing stili
+    Enum.EasingDirection.Out, -- Easing yönü
+    0, -- Başlangıç gecikmesi
+    false, -- Yineleme yok
+    0 -- Bekleme süresi
+)
+
+-- Kaybolma animasyonu (1 saniye)
+local disappearTweenInfo = TweenInfo.new(
+    1, -- Süre
+    Enum.EasingStyle.Quad, -- Easing stili
+    Enum.EasingDirection.In, -- Easing yönü
+    0, -- Başlangıç gecikmesi
+    false, -- Yineleme yok
+    0 -- Bekleme süresi
+)
+
+-- Büyüme ve küçülme animasyonu (0.5 saniye, tekrar eden)
+local pulseTweenInfo = TweenInfo.new(
+    0.5, -- Süre
+    Enum.EasingStyle.Quad, -- Easing stili
+    Enum.EasingDirection.InOut, -- Easing yönü
+    -1, -- Sonsuz döngü
+    true, -- Geriye doğru oynatma
+    0 -- Başlangıç gecikmesi
+)
+
+-- Belirme hedef özellikler
+local appearTweenGoal = {
+    TextTransparency = 0
+}
+
+-- Kaybolma hedef özellikler
+local disappearTweenGoal = {
+    TextTransparency = 1
+}
+
+-- Büyüme ve küçülme hedef özellikler
+local pulseTweenGoal = {
+    TextSize = 60
+}
+
+-- Animasyonları başlatma
+local appearTween = TweenService:Create(TextLabel, appearTweenInfo, appearTweenGoal)
+local disappearTween = TweenService:Create(TextLabel, disappearTweenInfo, disappearTweenGoal)
+local pulseTween = TweenService:Create(TextLabel, pulseTweenInfo, pulseTweenGoal)
+
+appearTween:Play()
+appearTween.Completed:Connect(function()
+    pulseTween:Play()
+    wait(2) -- Belirgin halde kalma süresi
+    pulseTween:Cancel()
+    disappearTween:Play()
+end)
+
+-- Tüm animasyonu 4 saniye sonra kaybolacak şekilde ayarlama
+wait(4)
+ScreenGui:Destroy()
