@@ -1,0 +1,138 @@
+-- main
+local ScreenGui = Instance.new("ScreenGui")
+local TextLabel = Instance.new("TextLabel")
+local SubTextLabel = Instance.new("TextLabel")
+local Ball1 = Instance.new("Frame")
+local Ball2 = Instance.new("Frame")
+local Ball3 = Instance.new("Frame")
+
+ScreenGui.Name = "AnimatedTextGui"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+TextLabel.Name = "AnimatedText"
+TextLabel.Parent = ScreenGui
+TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel.Position = UDim2.new(0.5, 0, 0.3, 0)
+TextLabel.Size = UDim2.new(0.21, 0, 0.1, 0)
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1
+TextLabel.Text = "GG-HUB, Made by @farxss!"
+TextLabel.Font = Enum.Font.Gotham
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 36
+TextLabel.TextTransparency = 1
+
+SubTextLabel.Name = "TypingText"
+SubTextLabel.Parent = ScreenGui
+SubTextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+SubTextLabel.Position = UDim2.new(0.5, 0, 0.4, 0)
+SubTextLabel.Size = UDim2.new(0.20, 0, 0.1, 0)
+SubTextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SubTextLabel.BackgroundTransparency = 1
+SubTextLabel.Text = ""
+SubTextLabel.Font = Enum.Font.Gotham
+SubTextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubTextLabel.TextSize = 24
+SubTextLabel.TextTransparency = 1
+
+local ballSize = 20
+local ballSpacing = 30
+local ballColor = Color3.fromRGB(0, 0, 0)
+
+local function createBall(parent, position)
+    local ball = Instance.new("Frame")
+    ball.Name = "AnimatedBall"
+    ball.Parent = parent
+    ball.AnchorPoint = Vector2.new(0.5, 0.5)
+    ball.Position = position
+    ball.Size = UDim2.new(0, ballSize, 0, ballSize)
+    ball.BackgroundColor3 = ballColor
+    ball.BackgroundTransparency = 0.2
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(1, 0)
+    UICorner.Parent = ball
+
+    return ball
+end
+
+Ball1 = createBall(ScreenGui, UDim2.new(0.45, -ballSpacing, 0.6, 0))
+Ball2 = createBall(ScreenGui, UDim2.new(0.5, 0, 0.6, 0))
+Ball3 = createBall(ScreenGui, UDim2.new(0.55, ballSpacing, 0.6, 0))
+
+-- the animation for tweenserv
+local TweenService = game:GetService("TweenService")
+
+-- 7secwaif
+local textTweenInfo = TweenInfo.new(
+    3, -- Süre
+    Enum.EasingStyle.Linear, -- Easing stili
+    Enum.EasingDirection.Out, -- Easing yönü
+    0, -- Başlangıç gecikmesi
+    false, -- Yineleme yok
+    0 -- Bekleme süresi
+)
+
+-- made by farxss
+local textTweenGoal = {
+    TextTransparency = 0
+}
+
+-- sstart
+local textTween = TweenService:Create(TextLabel, textTweenInfo, textTweenGoal)
+textTween:Play()
+
+-- new
+local function typeText(textObject, text, delay)
+    for i = 1, #text do
+        textObject.Text = string.sub(text, 1, i)
+        wait(delay)
+    end
+end
+
+
+spawn(function()
+    wait(1) -- Biraz bekleyip alt metin animasyonuna başlamak için
+    SubTextLabel.TextTransparency = 0
+    typeText(SubTextLabel, "Loading...", 0.1)
+end)
+
+-- ballanims
+local ballTweenInfo = TweenInfo.new(
+    0.5, -- Süre
+    Enum.EasingStyle.Quad, -- Easing stili
+    Enum.EasingDirection.InOut, -- Easing yönü
+    -1, -- Sonsuz döngü
+    true, -- Geriye doğru oynatma
+    0 -- Başlama gecikmesi
+)
+
+
+local ball1TweenGoal = {
+    Position = UDim2.new(0.45, -ballSpacing, 0.55, 0)
+}
+
+local ball2TweenGoal = {
+    Position = UDim2.new(0.5, 0, 0.55, 0)
+}
+
+local ball3TweenGoal = {
+    Position = UDim2.new(0.55, ballSpacing, 0.55, 0)
+}
+
+-- start12
+local ball1Tween = TweenService:Create(Ball1, ballTweenInfo, ball1TweenGoal)
+local ball2Tween = TweenService:Create(Ball2, ballTweenInfo, ball2TweenGoal)
+local ball3Tween = TweenService:Create(Ball3, ballTweenInfo, ball3TweenGoal)
+
+ball1Tween:Play()
+wait(0.5) -- Topçuğun animasyonlarının arasında bir gecikme
+ball2Tween:Play()
+wait(0.5) -- Topçuğun animasyonlarının arasında bir gecikme
+ball3Tween:Play()
+
+-- explode
+wait(10)
+print("hi")
+ScreenGui:Destroy()
